@@ -77,6 +77,14 @@ beta = nn.nn.nn_predict(np.asfortranarray(nn_params["network"]),
 np.savetxt("beta_ML.dat", beta)
 np.savetxt("weights_%d.dat"%(n_iter+restart), nn_params["weights"])
 
+with open("nn_config.dat","w+") as f:
+    f.write("%d\n"%len(n_neurons_hidden_layers))
+    for i in range(len(n_neurons_hidden_layers)):
+        f.write("%d\n"%n_neurons_hidden_layers[i])
+    f.write("%d\n"%np.shape(nn_params["weights"])[0])
+    for i in range(6):
+       f.write("%E\n"%nn_params["opt_params_array"][i])
+
 myplot(1, b, beta, 'xr', 1.0, None)
 myplot(1, [min(b), max(b)], [min(b), max(b)], '-g', 1.0, None)
 myfigshow()

@@ -1,14 +1,20 @@
 module ML_features
 
-    implicit none
+    use nn    implicit none
     contains
 
-    subroutine eval_features(rho,strain_mag,vort_mag,mu,nu_SA,wall_dist,upvp,features)
+    subroutine eval_beta(rho,strain_mag,vort_mag,mu,nu_SA,wall_dist,upvp,beta)
         
         implicit none
         
-        real*8, dimension(:), intent(in)  :: rho, strain_mag, vort_mag, mu, nu_SA, wall_dist, upvp
-        real*8, dimension(:), intent(out) :: features
+        integer, parameter                                       :: nfeatures = 5
+        real*8, dimension(:), intent(in)                         :: rho, strain_mag, vort_mag, mu, nu_SA, wall_dist, upvp
+        real*8, dimension(:), intent(out)                        :: beta
+        
+        real*8, dimension(nfeatures_temp,size(rho)) :: features
+        real*8, dimension(6) :: opt_params
+        integer :: n_layers, n_weights
+        integer, dimension(:), allocatable :: n_neurons        character(len=10) :: act_fn_name
         
         real*8, dimension(size(rho))      :: upvp, chi_SA, fv1_SA, fv2_SA, vort_SA, r_SA, g_SA, fw_SA, production, destruction
         
@@ -32,6 +38,30 @@ module ML_features
         features(5,:) = wall_dist
         features(5,:) = (features(5,:) - dble(1.208007895592732e-01))/dble(2.171529214322337e-01)
         
+        open(10, file='nn_config.dat', form='formatted', status='old')
+        read(10, *) n_layers
+        allocate(n_neurons(n_layers))
+        do i=1,n_layers
+            read(10, *) n_neurons(i)
+        end do
+        read(10, *) act_fn_name
+        read(10, *) n_weights
+        read(10, *) opt_params(1)
+        read(10, *) opt_params(2)
+        read(10, *) opt_params(3)
+        read(10, *) opt_params(4)
+        read(10, *) opt_params(5)
+        read(10, *) opt_params(6)
+        close(10)
+        open(20, file='weights.dat', form='formatted', status='old')
+        allocate(weights(n_weights))
+        do i=1,n_weights
+            read(10, *) weights(i)
+        end do
+        close(20)
+        call nn_predict(n_neurons, act_fn_name, 'mse', 'adam', n_weights, weights, nfeatures, size(rho), features, beta, opt_params)
+        deallocate(n_neurons)
+        deallocate(weights)
     end subroutine eval_features
 
 end module ML_features
