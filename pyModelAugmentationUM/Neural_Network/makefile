@@ -7,8 +7,8 @@ nn.so: *.f90
 	gfortran -ffree-form -fPIC -O3 -c NN_sens_predict.f90 
 	gfortran -ffree-form -fPIC -O3 -c NN_train.f90 
 	gfortran -ffree-form -fPIC -O3 -c NN_python_wrapper.f90
-	~/miniconda/bin/f2py -m nn -h nn.pyf NN_python_wrapper.f90 --overwrite-signature
-	~/miniconda/bin/f2py -c nn.pyf *.o
+	f2py -m nn -h nn.pyf NN_python_wrapper.f90 --overwrite-signature
+	f2py -c nn.pyf *.o
 	rm  *.o
 	rm nn.pyf
 	rm *.mod
