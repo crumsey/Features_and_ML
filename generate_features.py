@@ -196,7 +196,7 @@ print("Features saved to file")
 #------------------------------------------------------------------
 with open("feature_module.f90", "w+") as f:
 
-    f.write("module ML_features\n")
+    f.write("module ML_injection\n")
     f.write("\n")
     f.write("    use nn")
     f.write("    implicit none\n")
@@ -263,7 +263,7 @@ with open("feature_module.f90", "w+") as f:
     f.write("        deallocate(weights)\n")
     f.write("    end subroutine eval_features\n")
     f.write("\n")
-    f.write("end module ML_features")
+    f.write("end module ML_injection")
 
 print("Fortran module (with subroutine to evaluate features inside flow solver during injection process) written")
 
