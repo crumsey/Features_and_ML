@@ -1,6 +1,7 @@
 module ML_injection
 
-    use nn    implicit none
+    use nn
+    implicit none
     contains
 
     subroutine eval_beta(n_data,&

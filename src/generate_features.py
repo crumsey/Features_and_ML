@@ -175,7 +175,7 @@ with open("output_files/.ml_injection_1", "w+") as f:
     
     f.write("\n")
     
-    f.write("    use nn")
+    f.write("    use nn\n")
     f.write("    implicit none\n")
     f.write("    contains\n")
     
