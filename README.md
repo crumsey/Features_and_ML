@@ -21,18 +21,18 @@
 
 ## STEP 2
 
-- Edit `generate_features.py` if and as required
+- Edit `driver_features.py` if and as required
 
-- Run `python generate_features.py`
+- Run `python driver_features.py`
 
 - This will combine the data from variables and corresponding beta fields from all flow conditions, shuffle (or randomize) the data, and calculate features from the
-  provided variables. The final output of this step contains two files - `features_shuffled.dat` and `beta_target_shuffled.dat`, which can be used for training now
+  provided variables. The final output of this step contains two files - `input_files/features_shuffled.dat` and `input_files/beta_target_shuffled.dat`, which can be used for training now
 
 ## STEP 3
 
-- Edit `train.py` if and as required
+- Edit `driver_ML.py` if and as required
 
-- Run `python train.py`
+- Run `python driver_ML.py`
 
 - The plot of `beta_inverse vs. beta_ML` for latest iteration shall be saved in the `figs` folder as `training_quality_<n_iter>.png`
 
