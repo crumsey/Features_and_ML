@@ -3,13 +3,9 @@
 - Python major version : Python 3
 - Required packages    : numpy, scikit-learn, matplotlib
 
+# BEFORE YOU BEGIN
 
-
-
-
-
-
-
+- Go to the `Neural_Network` folder and run `make` from the terminal
 
 # MACHINE LEARNING TRAINING
 
@@ -37,14 +33,6 @@
 - The plot of `beta_inverse vs. beta_ML` for latest iteration shall be saved in the `figs` folder as `training_quality_<n_iter>.png`
 
 - A fortran file `output_files/ml_injection.f90` is created based on the latest iteration to be used for injection purposes in the flow solver.
-
-
-
-
-
-
-
-
 
 # MACHINE LEARNING INJECTION
 

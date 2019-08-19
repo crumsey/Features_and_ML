@@ -102,8 +102,10 @@ np.savetxt("output_files/weights/weights_%d.dat"%(n_iters+restart), nn_params["w
 # Plot the predictions w.r.t. inverse
 #-------------------------------------
 
-myplot(1, b, beta, 'xr', 1.0, None)
-myplot(1, [min(b), max(b)], [min(b), max(b)], '-g', 1.0, None)
+myplot("training_quality_%d"%maxiter, b, beta, 'xr', 1.0, "training")
+myplot("training_quality_%d"%maxiter, [min(b), max(b)], [min(b), max(b)], '-g', 1.0, "ideal")
+myfig("training_quality_%d"%maxiter, "$$\\beta_{inv}$$", "$$\\beta_{ML}$$", "Training quality", legend=True)
+myfigsave(".", "training_quality_%d"%maxiter)
 myfigshow()
 
 
