@@ -1,0 +1,33 @@
+        chi_SA = nu_SA*rho/mu
+
+        fv1_SA = mu_T / (nu_SA+1e-10) / rho
+
+        fv2_SA = 1.0 - chi_SA/(1.0 + chi_SA*fv1_SA)
+
+        vort_SA = vort_mag + fv2_SA * nu_SA/(0.41*wall_dist+1e-10)**2
+
+        r_SA = nu_SA / (vort_SA+1e-10) / (0.41*wall_dist+1e-10)**2
+
+        g_SA = 0.3*r_SA**6 + 0.7*r_SA
+
+        fw_SA = g_SA * (65.0/(g_SA**6 + 64.0))**(1./6.)
+
+        production = 0.1355 * nu_SA * vort_SA
+
+        destruction = (0.1355/0.41**2 + 2.622*1.5) * fw_SA * mu_T**2/(wall_dist+1e-10)**2/rho**2
+
+        features(1,:) = rho * vort_mag * wall_dist**2 / (mu_T + mu)
+        features(1,:) = (features(1,:) - dble(1.505232553357033e-05))/dble(5.169869534024708e-05)
+
+        features(2,:) = chi_SA
+        features(2,:) = (features(2,:) - dble(4.943931512771335e+02))/dble(1.806691208130323e+03)
+
+        features(3,:) = destruction/(production+1e-10)
+        features(3,:) = (features(3,:) - dble(5.850916223281899e+03))/dble(2.464194220818735e+04)
+
+        features(4,:) = upvp
+        features(4,:) = (features(4,:) - dble(2.695030424424496e-04))/dble(5.624035797601320e-03)
+
+        features(5,:) = wall_dist
+        features(5,:) = (features(5,:) - dble(1.208007895592732e-01))/dble(2.171529214322337e-01)
+

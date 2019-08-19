@@ -1,0 +1,39 @@
+module ML_injection
+
+    use nn    implicit none
+    contains
+
+    subroutine eval_beta(n_data,&
+                         rho,&
+                         wall_dist,&
+                         nu_SA,&
+                         mu_T,&
+                         vort_mag,&
+                         upvp,&
+                         beta)
+        
+        implicit none
+        
+        integer, parameter                     :: n_features = 5
+        integer, intent(in)                    :: n_data
+        real*8, dimension(n_data), intent(in)  :: rho,&
+                                                  wall_dist,&
+                                                  nu_SA,&
+                                                  mu_T,&
+                                                  vort_mag,&
+                                                  upvp
+
+        real*8, dimension(n_data), intent(out) :: beta
+        
+        real*8, dimension(n_features,n_data)   :: features
+        
+        real*8, dimension(n_data)              :: chi_SA,&
+                                                  fv1_SA,&
+                                                  fv2_SA,&
+                                                  vort_SA,&
+                                                  r_SA,&
+                                                  g_SA,&
+                                                  fw_SA,&
+                                                  production,&
+                                                  destruction
+
