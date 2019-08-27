@@ -13,7 +13,7 @@ b = np.loadtxt("beta_target_shuffled.dat") # Beta target
 
 n_features = np.shape(f)[0]	  # Automatically calculates the number of features
 
-n_neurons_hidden_layers=[20,20]	  # Two hidden layers with 15 neurons each
+n_neurons_hidden_layers=[20,20]	  # Two hidden layers with 20 neurons each
 
 nn_params = {}
 
