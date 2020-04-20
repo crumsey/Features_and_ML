@@ -10,7 +10,7 @@
 
 var_file_name  = "var"
 beta_file_name = "beta"
-case_names     = ["0"]
+case_names     = ["20"]
 
 
 
@@ -24,7 +24,15 @@ var_names = ["rho", "wall_dist", "nu_SA", "mu_T", "vort_mag", "upvp"]
 
 # SET VARIABLES NOT AVAILABLE FROM SOLVER (NEEDED TO EVALUATE DERIVED VARIABLES) TO SOME DEFAULT VALUES
 
-na_vars   = {'mu' : 1.0}
+na_vars   = {'mu'       : 1.0,
+             'mach'     : 0.1,
+             'reynolds' : 2.0e6,
+             'cb1'      : 0.1355,
+             'kappa'    : 0.41,
+             'cb2'      : 0.622,
+             'sigma'    : 0.6666667,
+             'ct3'      : 1.2,
+             'ct4'      : 0.5}
 
 
 
@@ -37,28 +45,32 @@ derived_vars = {'chi_SA'      : 'nu_SA*rho/mu',
 
                 'fv2_SA'      : '1.0 - chi_SA/(1.0 + chi_SA*fv1_SA)',
 
-                'vort_SA'     : 'vort_mag + fv2_SA * nu_SA/(0.41*wall_dist+1e-10)**2',
+                'vort_SA'     : 'vort_mag + mach/reynolds*fv2_SA * nu_SA/(kappa*wall_dist+1e-10)**2',
 
-                'r_SA'        : 'nu_SA / (vort_SA+1e-10) / (0.41*wall_dist+1e-10)**2',
+                'r_SA'        : 'mach/reynolds*nu_SA / (vort_SA+1e-10) / (kappa*wall_dist+1e-10)**2',
 
                 'g_SA'        : '0.3*r_SA**6 + 0.7*r_SA',
 
                 'fw_SA'       : 'g_SA * (65.0/(g_SA**6 + 64.0))**(1./6.)',
 
-                'production'  : '0.1355 * nu_SA * vort_SA',
+                'ft2'         : 'ct3 * np.exp(-ct4*chi_SA**2)',
 
-                'destruction' : '(0.1355/0.41**2 + 2.622*1.5) * fw_SA * mu_T**2/(wall_dist+1e-10)**2/rho**2'}
+                'production'  : 'cb1*(1.-ft2) * nu_SA * vort_SA',
+
+                'cw1'         : 'cb1/kappa**2 + ((1.+cb2)/sigma)',
+
+                'destruction' : '(cw1 * fw_SA - cb1*ft2/(kappa**2)) * nu_SA**2/(wall_dist+1e-10)**2'}
 
 
 
 
 # SET FEATURES HERE (STORED AS STRINGS, WILL BE EXECUTED AS COMMANDS LATER) AS A LIST
 
-feature_defs = ['rho * vort_mag * wall_dist**2 / (mu_T + mu)',
+feature_defs = ['reynolds/mach*rho * vort_mag * wall_dist**2 / (mu_T + mu)',
                 
                 'chi_SA',
                 
-                'destruction/(production+1e-10)',
+                'mach/reynolds*destruction/(production+1e-10)',
                 
                 'upvp',
                 
