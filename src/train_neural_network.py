@@ -108,6 +108,7 @@ myfig("training_quality_%d"%maxiter, "$$\\beta_{inv}$$", "$$\\beta_{ML}$$", "Tra
 myfigsave(".", "training_quality_%d"%maxiter)
 myfigshow()
 
+one=1
 
 #-----------------------------------------------------------------------------------------------------------
 # Complete the injection library for Fortran
@@ -126,28 +127,37 @@ with open("output_files/ml_injection.f90", "w+") as h:
     h.write(data1)
 
     h.write("        \n")
+    h.write("        real(dp), intent(in)  :: mu, mach, reynolds\n")
+    h.write("        real(dp)              :: kappa, ct3, ct4, cb1, cb2, sigma\n")
     h.write("        integer, parameter     :: n_weights=%d\n"%(len(nn_params["weights"])))
-    h.write("        integer, dimension(%d)  :: n_neurons=(\\ %d"%(np.shape(n_neurons_hidden_layers)[0], n_neurons_hidden_layers[0]))
+    h.write("        integer, dimension(%d)  :: n_neurons=(/ %d,%d"%(np.shape(n_neurons_hidden_layers)[0]+2,n_features,n_neurons_hidden_layers[0]))
     for i in range(1, np.shape(n_neurons_hidden_layers)[0]):
         h.write(", %d"%(n_neurons_hidden_layers[i]))
-    h.write(" \\)\n")
+    h.write(",%d"%(one))
+    h.write(" /)\n")
     h.write("        character(len=10)      :: act_fn_name='%s', loss_fn_name='%s', opt_name='%s'\n"%(activation_function, loss_function, optimizer))
     h.write("        \n")
-    h.write("        real*8, dimension(6) :: opt_params=(\\ dble(%.15f),&\n"%(nn_params["opt_params_array"][0]))
+    h.write("        real(dp), dimension(6) :: opt_params=(/ %.15f,&\n"%(nn_params["opt_params_array"][0]))
     for i in range(1,5):
-        h.write("                                              dble(%.15f),&\n"%(nn_params["opt_params_array"][i]))
-    h.write("                                              dble(%.15f) \\)\n"%(nn_params["opt_params_array"][5]))
+        h.write("                                              %.15f,&\n"%(nn_params["opt_params_array"][i]))
+    h.write("                                              %.15f /)\n"%(nn_params["opt_params_array"][5]))
     h.write("        \n")
-    h.write("        real*8, dimension(n_weights) :: weights = (\\ dble(%.15f),&\n"%(nn_params["weights"][0]))
+    h.write("        real(dp), dimension(n_weights) :: weights = (/ %.15f,&\n"%(nn_params["weights"][0]))
     for i in range(1, len(nn_params["weights"])-1):
-        h.write("                                                     dble(%.15f),&\n"%(nn_params["weights"][i]))
-    h.write("                                                     dble(%.15f) \\)\n"%(nn_params["weights"][len(nn_params["weights"])-1]))
+        h.write("                                                     %.15f,&\n"%(nn_params["weights"][i]))
+    h.write("                                                     %.15f /)\n"%(nn_params["weights"][len(nn_params["weights"])-1]))
     
+    h.write("  kappa=0.41_dp\n")
+    h.write("  ct3=1.2_dp\n")
+    h.write("  ct4=0.5_dp\n")
+    h.write("  cb1=0.1355_dp\n")
+    h.write("  cb2=0.622_dp\n")
+    h.write("  sigma=2._dp/3._dp\n")
     h.write("\n\n")
     h.write(data2)
     h.write("\n")
     
-    h.write("        call nn_predict(n_neurons, act_fn_name, loss_fn_name, opt_name, n_weights, weights, n_features, n_data, &\n")
+    h.write("        call nn_predict(n_neurons, act_fn_name, loss_fn_name, opt_name, n_weights, weights, n_features, &\n")
     h.write("                        features, beta, opt_params)\n\n")
     h.write("    end subroutine eval_beta\n\n")
     h.write("end module ML_injection")

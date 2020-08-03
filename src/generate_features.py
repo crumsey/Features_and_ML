@@ -181,9 +181,10 @@ with open("output_files/.ml_injection_1", "w+") as f:
     
     f.write("\n")
     
-    f.write("    subroutine eval_beta(n_data,&\n")
+    f.write("    subroutine eval_beta(&\n")
     for i in range(len(var_names)):
         f.write("                         %s,&\n"%var_names[i])
+    f.write("          mu, mach, reynolds,&\n")
     f.write("                         beta)\n")
     
     f.write("        \n")
@@ -194,24 +195,22 @@ with open("output_files/.ml_injection_1", "w+") as f:
 
     f.write("        integer, parameter                     :: n_features = %d\n"%np.shape(features)[1])
 
-    f.write("        integer, intent(in)                    :: n_data\n")
-
-    f.write("        real*8, dimension(n_data), intent(in)  :: ")
+    f.write("        real(dp), intent(in)  :: ")
     for i in range(len(var_names)):
         f.write("%s"%var_names[i])
         if (i < len(var_names)-1):
             f.write(",&\n                                                  ")
     f.write("\n\n")
 
-    f.write("        real*8, dimension(n_data), intent(out) :: beta\n")
+    f.write("        real(dp), intent(out) :: beta\n")
     
     f.write("        \n")
     
-    f.write("        real*8, dimension(n_features,n_data)   :: features\n")
+    f.write("        real(dp), dimension(n_features)   :: features\n")
     
     f.write("        \n")
     
-    f.write("        real*8, dimension(n_data)              :: ")
+    f.write("        real(dp)              :: ")
     counter = 0
     for key in derived_vars:
         if counter==1:
@@ -230,8 +229,8 @@ with open("output_files/.ml_injection_2", "w+") as g:
         g.write("        %s = %s\n\n"%(key, derived_vars[key]))
 
     for feature_id in range(len(feature_defs)):
-        g.write("        features(%d,:) = %s\n"%(feature_id+1, feature_defs[feature_id]))
-        g.write("        features(%d,:) = (features(%d,:) - dble(%.15e))/dble(%.15e)\n"%(feature_id+1, feature_id+1, feature_mean[feature_id], feature_stdev[feature_id]))
+        g.write("        features(%d) = %s\n"%(feature_id+1, feature_defs[feature_id]))
+        g.write("        features(%d) = (features(%d) - %.15e_dp)/%.15e_dp\n"%(feature_id+1, feature_id+1, feature_mean[feature_id], feature_stdev[feature_id]))
         g.write("\n")
 
     g.close()
