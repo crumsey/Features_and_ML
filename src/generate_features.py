@@ -187,11 +187,11 @@ with open("output_files/.ml_injection_1", "w+") as f:
     f.write("          mu, mach, reynolds,&\n")
     f.write("                         beta)\n")
     
-    f.write("        \n")
+    f.write("\n")
 
     f.write("        implicit none\n")
 
-    f.write("        \n")
+    f.write("\n")
 
     f.write("        integer, parameter                     :: n_features = %d\n"%np.shape(features)[1])
 
@@ -204,11 +204,11 @@ with open("output_files/.ml_injection_1", "w+") as f:
 
     f.write("        real(dp), intent(out) :: beta\n")
     
-    f.write("        \n")
+    f.write("\n")
     
     f.write("        real(dp), dimension(n_features)   :: features\n")
     
-    f.write("        \n")
+    f.write("\n")
     
     f.write("        real(dp)              :: ")
     counter = 0

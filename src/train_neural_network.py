@@ -136,12 +136,12 @@ with open("output_files/ml_injection.f90", "w+") as h:
     h.write(",%d"%(one))
     h.write(" /)\n")
     h.write("        character(len=10)      :: act_fn_name='%s', loss_fn_name='%s', opt_name='%s'\n"%(activation_function, loss_function, optimizer))
-    h.write("        \n")
+    h.write("\n")
     h.write("        real(dp), dimension(6) :: opt_params=(/ %.15f,&\n"%(nn_params["opt_params_array"][0]))
     for i in range(1,5):
         h.write("                                              %.15f,&\n"%(nn_params["opt_params_array"][i]))
     h.write("                                              %.15f /)\n"%(nn_params["opt_params_array"][5]))
-    h.write("        \n")
+    h.write("\n")
     h.write("        real(dp), dimension(n_weights) :: weights = (/ %.15f,&\n"%(nn_params["weights"][0]))
     for i in range(1, len(nn_params["weights"])-1):
         h.write("                                                     %.15f,&\n"%(nn_params["weights"][i]))
